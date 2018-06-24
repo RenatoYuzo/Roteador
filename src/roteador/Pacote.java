@@ -46,18 +46,18 @@ public class Pacote {
                 + this.mensagem + ","
                 + this.TTL;
     }
-    
+
     public static Pacote criaPacote(String msg) {
         String splitador[] = msg.split(",");
         Integer TTL = Integer.parseInt(splitador[3]) - 1;
 
         return new Pacote(splitador[0], splitador[1], splitador[2], TTL);
     }
-    
+
     public static boolean verificaTTL(Pacote p) {
         return p.getTTL() > 0;
     }
-    
+
     public static Pacote recebePacote(String myIP, Integer interFace) {
         DatagramPacket recvPacket = null;
         DatagramSocket recvSocket;
@@ -74,14 +74,13 @@ public class Pacote {
             System.out.println("Esperando Pacote . . .");
             MainView.log.add("Esperando Pacote . . .");
             recvSocket.receive(recvPacket);
-            
+
             String msg = new String(recvPacket.getData()).trim();
             recvSocket.close();
-            
+
             Pacote p = Pacote.criaPacote(msg);
-            //Pacote p = criaPacote(msg);
             System.out.println("Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString());
-            MainView.log.add("Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString());            
+            MainView.log.add("Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString());
             return p;
         } catch (SocketException e) {
             e.printStackTrace();
@@ -90,7 +89,7 @@ public class Pacote {
         }
         return null;
     }
-    
+
     public static void enviaPacote(Pacote p, TabelaDeRoteamento t) {
         DatagramSocket sendSocket;
         DatagramPacket sendPacket;
