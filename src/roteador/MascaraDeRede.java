@@ -2,6 +2,10 @@ package roteador;
 
 public abstract class MascaraDeRede {
 
+    /*
+         * Este metodo recebe como parametro um numero inteiro, e retorna o seu
+         * binario correspondente com 8 bits.
+     */
     public static String IntToBinary(int inteiro) {
         String binarioCom8bits = Integer.toBinaryString(inteiro);
 

@@ -26,22 +26,26 @@ public class Roteador implements Runnable {
 
         while (true) {
             Pacote p = Pacote.recebePacote(myIP, interFace);
-            if (Pacote.verificaTTL(p)) {
+            if (p.verificaTTL()) {
 
                 TabelaDeRoteamento t = TabelaDeRoteamento.verificaTabelaRoteamento(p, tabela);
                 if (t != null && !t.getProxRoteador().equals("0.0.0.0")) {
                     Pacote.enviaPacote(p, t);
                 } else if (t != null && t.getProxRoteador().equals("0.0.0.0")) {
-                    System.out.println("Pacote entregue ao destinatário! IP Origem do Pacote: " + p.getIpOrigem());
-                    MainView.log.add("Pacote entregue ao destinatário! IP Origem do Pacote: " + p.getIpOrigem());
+                    String printout = "[ Pacote entregue ao destinatário! Origem: " + p.getIpOrigem() 
+                            + " para " + p.getIpDestino() + " : " + p.getMensagem() + " ]"; 
+                    System.out.println(printout);
+                    MainView.log.add(printout);
                 } else {
-                    System.out.println("Pacote Descartado!");
-                    MainView.log.add("Pacote Descartado!");
+                    String printout = "[ Destino " + p.getIpDestino() + " não encontrado, pacote descartado! ]";
+                    System.out.println(printout);
+                    MainView.log.add(printout);
                 }
 
             } else {
-                System.out.println("TTL Excedido!");
-                MainView.log.add("TTL Excedido!");
+                String printout = "[ TTL Excedido, pacote descartado! ]";
+                System.out.println(printout);
+                MainView.log.add(printout);
             }
         }
     }

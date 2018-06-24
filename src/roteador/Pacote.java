@@ -23,28 +23,18 @@ public class Pacote {
         this.TTL = TTL;
     }
 
-    public String getIpOrigem() {
-        return this.ipOrigem;
-    }
-
-    public String getIpDestino() {
-        return this.ipDestino;
-    }
-
-    public String getMensagem() {
-        return this.mensagem;
-    }
-
-    public Integer getTTL() {
-        return this.TTL;
+    public String getIpOrigem() { return this.ipOrigem; }
+    public String getIpDestino() { return this.ipDestino; }
+    public String getMensagem() { return this.mensagem; }
+    public Integer getTTL() { return this.TTL; }
+    
+    public boolean verificaTTL() {
+        return this.TTL > 0;
     }
 
     @Override
-    public String toString() {
-        return this.ipOrigem + ","
-                + this.ipDestino + ","
-                + this.mensagem + ","
-                + this.TTL;
+    public String toString() { 
+        return this.ipOrigem+","+ this.ipDestino+","+ this.mensagem+","+ this.TTL; 
     }
 
     public static Pacote criaPacote(String msg) {
@@ -52,10 +42,6 @@ public class Pacote {
         Integer TTL = Integer.parseInt(splitador[3]) - 1;
 
         return new Pacote(splitador[0], splitador[1], splitador[2], TTL);
-    }
-
-    public static boolean verificaTTL(Pacote p) {
-        return p.getTTL() > 0;
     }
 
     public static Pacote recebePacote(String myIP, Integer interFace) {
@@ -79,8 +65,10 @@ public class Pacote {
             recvSocket.close();
 
             Pacote p = Pacote.criaPacote(msg);
-            System.out.println("Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString());
-            MainView.log.add("Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString());
+            
+            String printout = "[ Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString() + " ]"; 
+            System.out.println(printout);
+            MainView.log.add(printout);
             return p;
         } catch (SocketException e) {
             e.printStackTrace();
@@ -94,16 +82,17 @@ public class Pacote {
         DatagramSocket sendSocket;
         DatagramPacket sendPacket;
 
-        /*System.out.println("Achei na tabela de roteamento: " + t.getRedeDestino());
-            MainView.log.add("Achei na tabela de roteamento: " + t.getRedeDestino());*/
         try {
             sendSocket = new DatagramSocket();
             byte[] sendData = p.toString().getBytes();
             sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName(t.getProxRoteador()),
                     t.getInterFace());
             sendSocket.send(sendPacket);
-            System.out.println("Pacote enviado para o roteador (" + t.getProxRoteador() + ", " + t.getInterFace() + ")");
-            MainView.log.add("Pacote enviado para o roteador (" + t.getProxRoteador() + ", " + t.getInterFace() + ")");
+            
+            String printout = "[ Repassando pacote destino a " + p.ipDestino + " para o próximo salto "
+                        + t.getProxRoteador() + " pela interface " + t.getInterFace() + " ]";
+            System.out.println(printout);
+            MainView.log.add(printout);
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
