@@ -42,6 +42,9 @@ public class TabelaDeRoteamento {
                 + ", interFace=" + interFace + "]";
     }
     
+    /*
+         * Metodo usado para preencher a tabela de roteamento na interce grafica
+    */
     public static void populaTabela(List<TabelaDeRoteamento> tabela) {
         String[] colunas = new String[]{"Rede Destino","Next Hop","Interface"};
         String[][] dados = new String[tabela.size()][3];
@@ -58,6 +61,10 @@ public class TabelaDeRoteamento {
         MainView.RouterTable.setModel(dtm);
     }
     
+    /*
+         * Este metodo recebe como parametro uma String com os parametros digitados pelo usuario
+         * e retorna a tabela de roteamento
+    */
     public static List<TabelaDeRoteamento> criaTabelaDeRoteamento(String parametrosRoteador[]) {    
         List<TabelaDeRoteamento> tabela = new ArrayList<TabelaDeRoteamento>();
         for (String s : parametrosRoteador) {
@@ -69,7 +76,12 @@ public class TabelaDeRoteamento {
         }
         return tabela;
     }
-
+    
+    /*
+         * Este metodo faz uma busca na tabela de roteamento, se encontrar o ip correspondente,
+         * salva sua posicao na tabela e sua mascara, para posteriormente, fazer a verificacao
+         * do longest match
+    */
     public static TabelaDeRoteamento verificaTabelaRoteamento(Pacote p, List<TabelaDeRoteamento> tabela) {
         int posicao = -1;
         int longestMatch = -1;

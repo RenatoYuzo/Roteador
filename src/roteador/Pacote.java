@@ -28,6 +28,10 @@ public class Pacote {
     public String getMensagem() { return this.mensagem; }
     public Integer getTTL() { return this.TTL; }
     
+    /*
+        * Metodo que apenas retorna true se TTL for maior do que 1
+        * retorna false, caso contrario
+    */
     public boolean verificaTTL() {
         return this.TTL > 1;
     }
@@ -37,13 +41,21 @@ public class Pacote {
         return this.ipOrigem+","+ this.ipDestino+","+ this.mensagem+","+ this.TTL; 
     }
 
-    public static Pacote criaPacote(String msg) {
+    /*
+        * Metodo que recebe uma String que corresponde aos parametros enviados
+        * pelo programa Emissor, decodifica a String usando o split(",")
+        * e retorna um objeto da classe Pacote
+    */
+    private static Pacote criaPacote(String msg) {
         String splitador[] = msg.split(",");
         Integer TTL = Integer.parseInt(splitador[3]) - 1;
 
         return new Pacote(splitador[0], splitador[1], splitador[2], TTL);
     }
 
+    /*
+        * Metodo que faz a comunicao UDP, escutando na porta fornecida pelo usuario
+    */
     public static Pacote recebePacote(String myIP, Integer interFace) {
         DatagramPacket recvPacket = null;
         DatagramSocket recvSocket;
@@ -64,7 +76,7 @@ public class Pacote {
             String msg = new String(recvPacket.getData()).trim();
             recvSocket.close();
 
-            Pacote p = Pacote.criaPacote(msg);
+            Pacote p = criaPacote(msg);
             
             String printout = "[ Pacote recebido com TTL=" + p.getTTL() + " | Conteúdo do pacote: " + p.toString() + " ]"; 
             System.out.println(printout);
@@ -78,6 +90,9 @@ public class Pacote {
         return null;
     }
 
+    /*
+        * Metodo que faz a comunicacao UDP, enviando um pacote para o proximo roteador
+    */
     public static void enviaPacote(Pacote p, TabelaDeRoteamento t) {
         DatagramSocket sendSocket;
         DatagramPacket sendPacket;

@@ -123,7 +123,7 @@ public abstract class MascaraDeRede {
 
     /*
 	 * Este metodo recebe com parametro um endereco IP destino e uma mascara, e
-	 * retorna a operacao & logica entre eles.
+	 * retorna a operacao AND entre eles.
      */
     public static String IpHostToIpRede(String ipDestino, String mask) {
         String splitado[] = ipDestino.split("[.]");
