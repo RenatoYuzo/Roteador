@@ -13,16 +13,12 @@ public class Roteador implements Runnable {
     public Roteador(String myIP, Integer porta, String parametrosRoteador[]) {
         this.myIP = myIP;
         this.interFace = porta;
-        TabelaDeRoteamento.criaTabelaDeRoteamento(parametrosRoteador, tabela);
+        this.tabela = TabelaDeRoteamento.criaTabelaDeRoteamento(parametrosRoteador);
     }
 
     @Override
     public void run() {
-
-        for (TabelaDeRoteamento t : tabela) {
-            System.out.println(t.toString());
-            MainView.log.add(t.toString());
-        }
+        TabelaDeRoteamento.populaTabela(tabela); // Metodo so para preencher a tabela da interface grafica
 
         while (true) {
             Pacote p = Pacote.recebePacote(myIP, interFace);
@@ -32,7 +28,7 @@ public class Roteador implements Runnable {
                 if (t != null && !t.getProxRoteador().equals("0.0.0.0")) {
                     Pacote.enviaPacote(p, t);
                 } else if (t != null && t.getProxRoteador().equals("0.0.0.0")) {
-                    String printout = "[ Pacote entregue ao destinatário! Origem: " + p.getIpOrigem() 
+                    String printout = "[ Pacote entregue ao destinatário! De " + p.getIpOrigem() 
                             + " para " + p.getIpDestino() + " : " + p.getMensagem() + " ]"; 
                     System.out.println(printout);
                     MainView.log.add(printout);

@@ -29,7 +29,7 @@ public class Pacote {
     public Integer getTTL() { return this.TTL; }
     
     public boolean verificaTTL() {
-        return this.TTL > 0;
+        return this.TTL > 1;
     }
 
     @Override
@@ -56,11 +56,11 @@ public class Pacote {
 
             byte[] recvData = new byte[1024];
             recvPacket = new DatagramPacket(recvData, recvData.length);
-
+                        
             System.out.println("Esperando Pacote . . .");
             MainView.log.add("Esperando Pacote . . .");
             recvSocket.receive(recvPacket);
-
+            
             String msg = new String(recvPacket.getData()).trim();
             recvSocket.close();
 

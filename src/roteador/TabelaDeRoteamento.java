@@ -1,6 +1,9 @@
 package roteador;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import view.MainView;
 
 public class TabelaDeRoteamento {
 
@@ -38,8 +41,25 @@ public class TabelaDeRoteamento {
         return "TabelaDeRoteamento [redeDestino=" + redeDestino + ", mask=" + mask + ", proxRoteador=" + proxRoteador
                 + ", interFace=" + interFace + "]";
     }
-
-    public static List<TabelaDeRoteamento> criaTabelaDeRoteamento(String parametrosRoteador[], List<TabelaDeRoteamento> tabela) {
+    
+    public static void populaTabela(List<TabelaDeRoteamento> tabela) {
+        String[] colunas = new String[]{"Rede Destino","Next Hop","Interface"};
+        String[][] dados = new String[tabela.size()][3];
+        TabelaDeRoteamento t;
+        for (int i=0; i<tabela.size(); i++) {
+            t = tabela.get(i);
+            System.out.println(t.toString());
+            dados[i][0] = t.getRedeDestino()+"/"+t.getMaskInCIDR();
+            dados[i][1] = t.getProxRoteador();
+            dados[i][2] = Integer.toString(t.getInterFace());
+        }
+        
+        DefaultTableModel dtm = new DefaultTableModel(dados, colunas);
+        MainView.RouterTable.setModel(dtm);
+    }
+    
+    public static List<TabelaDeRoteamento> criaTabelaDeRoteamento(String parametrosRoteador[]) {    
+        List<TabelaDeRoteamento> tabela = new ArrayList<TabelaDeRoteamento>();
         for (String s : parametrosRoteador) {
             String splitador[] = s.split("/");
 
