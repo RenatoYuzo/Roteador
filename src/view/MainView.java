@@ -137,6 +137,9 @@ public class MainView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        tfIP.setEnabled(false);
+        jButton1.setEnabled(false);
+        
         String parametrosEntrada = tfComando.getText();
         String splitador[] = parametrosEntrada.split(" ");
         Integer porta = Integer.parseInt(splitador[1]);
